@@ -4,7 +4,7 @@ export const OrderSummary = () => {
 	return (
 		<Grid container>
 			<Grid item xs={6}>
-				<Typography>No. Productos</Typography>
+				<Typography>Products</Typography>
 			</Grid>
 			<Grid item xs={6} display="flex" justifyContent="end">
 				<Typography>3 items</Typography>
@@ -18,17 +18,19 @@ export const OrderSummary = () => {
 			</Grid>
 
 			<Grid item xs={6}>
-				<Typography>Impuestos (15%)</Typography>
+				<Typography>Taxes (15%)</Typography>
 			</Grid>
 			<Grid item xs={6} display="flex" justifyContent="end">
 				<Typography>{`$${35.34}`}</Typography>
 			</Grid>
 
 			<Grid item xs={6} sx={{ mt: 2 }}>
-				<Typography variant="subtitle1">Total:</Typography>
+				<Typography variant="h6" fontWeight={600}>
+					Total:
+				</Typography>
 			</Grid>
 			<Grid item xs={6} sx={{ mt: 2 }} display="flex" justifyContent="end">
-				<Typography variant="subtitle1">{`$${186.34}`}</Typography>
+				<Typography variant="h6" fontWeight={600}>{`$${186.34}`}</Typography>
 			</Grid>
 		</Grid>
 	);

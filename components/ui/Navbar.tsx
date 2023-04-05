@@ -17,13 +17,13 @@ export const Navbar = () => {
 
 				<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
 					<NextLink href="/xd" style={{ textDecoration: 'none', marginRight: '10px' }}>
-						<Button variant="outlined">Hombres</Button>
+						<Button variant="outlined">Men</Button>
 					</NextLink>
 					<NextLink href="/" style={{ textDecoration: 'none', marginRight: '10px' }}>
-						<Button variant="outlined">Mujeres</Button>
+						<Button variant="outlined">Women</Button>
 					</NextLink>
 					<NextLink href="/" style={{ textDecoration: 'none' }}>
-						<Button variant="outlined">Niños</Button>
+						<Button variant="outlined">Kids</Button>
 					</NextLink>
 				</Box>
 
@@ -42,7 +42,7 @@ export const Navbar = () => {
 				</NextLink>
 
 				<Button variant="outlined" sx={{ marginLeft: '10px' }}>
-					Menú
+					Menu
 				</Button>
 			</Toolbar>
 		</AppBar>

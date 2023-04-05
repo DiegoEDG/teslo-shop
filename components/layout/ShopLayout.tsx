@@ -26,7 +26,7 @@ export const ShopLayout: FC<PropsWithChildren<Props>> = ({ children, title, page
 			</nav>
 			<main
 				style={{
-					margin: '60px auto',
+					margin: '70px auto',
 					maxWidth: '1440px',
 					padding: '0px 15px',
 					display: 'block'

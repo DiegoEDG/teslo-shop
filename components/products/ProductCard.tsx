@@ -10,6 +10,7 @@ interface Props {
 
 export const ProductCard: FC<Props> = ({ product }) => {
 	const [isHovered, setIsHovered] = useState(false);
+	const [isImgLoaded, setIsImgLoaded] = useState(false);
 
 	const productImage = useMemo(() => {
 		return isHovered ? `products/${product.images[1]}` : `products/${product.images[0]}`;
@@ -20,12 +21,18 @@ export const ProductCard: FC<Props> = ({ product }) => {
 			<Card>
 				<NextLink href="/product/slug" passHref prefetch={false}>
 					<CardActionArea>
-						<CardMedia component="img" className="fadeIn" image={productImage} alt={product.title} />
+						<CardMedia
+							component="img"
+							className="fadeIn"
+							image={productImage}
+							alt={product.title}
+							onLoad={() => setIsImgLoaded(true)}
+						/>
 					</CardActionArea>
 				</NextLink>
 			</Card>
 
-			<Box sx={{ mt: 1 }} className="fadeIn">
+			<Box sx={{ mt: 1, display: isImgLoaded ? 'block' : 'none' }} className="fadeIn">
 				<Typography fontWeight={700}>{product.title}</Typography>
 				<Typography fontWeight={500}>{`$${product.price}`}</Typography>
 			</Box>

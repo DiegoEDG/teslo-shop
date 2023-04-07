@@ -7,7 +7,7 @@ export default function KidsPage() {
 	const { products, loading } = useProducts('/products?gender=kid');
 
 	return (
-		<ShopLayout title="KidsPage" pageDescription="Clothes for Kids">
+		<ShopLayout title="TesloShop | Kids" pageDescription="Clothes for Kids">
 			{loading ? <Loading /> : <ProductList products={products} />}
 		</ShopLayout>
 	);

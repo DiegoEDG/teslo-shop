@@ -7,7 +7,7 @@ export default function MenPage() {
 	const { products, loading } = useProducts('/products?gender=men');
 
 	return (
-		<ShopLayout title="MenPage" pageDescription="Clothes for men">
+		<ShopLayout title="TesloShop | Men" pageDescription="Clothes for men">
 			{loading ? <Loading /> : <ProductList products={products} />}
 		</ShopLayout>
 	);

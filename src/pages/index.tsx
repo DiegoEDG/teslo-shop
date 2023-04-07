@@ -7,7 +7,7 @@ export default function HomePage() {
 	const { products, loading } = useProducts('/products');
 
 	return (
-		<ShopLayout title="HomePage" pageDescription="HomePage">
+		<ShopLayout title="TesloShop | Home" pageDescription="HomePage">
 			{loading ? <Loading /> : <ProductList products={products} />}
 		</ShopLayout>
 	);

@@ -3,9 +3,16 @@ import NextLink from 'next/link';
 import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from '@mui/material';
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { UIContext } from '../../context/ui/UIContext';
 
 export const Navbar = () => {
 	const { pathname } = useRouter();
+	const { toggleMenu } = useContext(UIContext);
+
+	const handleClick = () => {
+		toggleMenu();
+	};
 
 	return (
 		<AppBar>
@@ -29,8 +36,8 @@ export const Navbar = () => {
 							Women
 						</Button>
 					</NextLink>
-					<NextLink href="/category/kids" style={{ textDecoration: 'none' }}>
-						<Button variant="outlined" className={pathname === '/category/kids' ? 'active-button' : ''}>
+					<NextLink href="/category/kid" style={{ textDecoration: 'none' }}>
+						<Button variant="outlined" className={pathname === '/category/kid' ? 'active-button' : ''}>
 							Kids
 						</Button>
 					</NextLink>
@@ -50,7 +57,7 @@ export const Navbar = () => {
 					</IconButton>
 				</NextLink>
 
-				<Button variant="outlined" sx={{ marginLeft: '10px' }}>
+				<Button variant="outlined" sx={{ marginLeft: '10px' }} onClick={handleClick}>
 					Menu
 				</Button>
 			</Toolbar>

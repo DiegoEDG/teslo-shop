@@ -1,12 +1,14 @@
-import { Typography } from '@mui/material';
 import { ShopLayout } from '../../components/layout';
 import { ProductList } from '../../components/products';
-import { initialData } from '../../database/products';
+import { Loading } from '../../components/ui';
+import { useProducts } from '../../hooks/useProducts';
 
-export default function Home() {
+export default function HomePage() {
+	const { products, error, loading } = useProducts('/products');
+
 	return (
-		<ShopLayout title="Home" pageDescription="HomePage">
-			<ProductList products={initialData.products as any} />
+		<ShopLayout title="HomePage" pageDescription="HomePage">
+			{loading ? <Loading /> : <ProductList products={products} />}
 		</ShopLayout>
 	);
 }

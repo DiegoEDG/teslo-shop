@@ -2,8 +2,11 @@ import NextLink from 'next/link';
 
 import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from '@mui/material';
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 export const Navbar = () => {
+	const { pathname } = useRouter();
+
 	return (
 		<AppBar>
 			<Toolbar>
@@ -16,14 +19,20 @@ export const Navbar = () => {
 				<Box flex={1} />
 
 				<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-					<NextLink href="/xd" style={{ textDecoration: 'none', marginRight: '10px' }}>
-						<Button variant="outlined">Men</Button>
+					<NextLink href="/category/men" style={{ textDecoration: 'none', marginRight: '10px' }}>
+						<Button variant="outlined" className={pathname === '/category/men' ? 'active-button' : ''}>
+							Men
+						</Button>
 					</NextLink>
-					<NextLink href="/" style={{ textDecoration: 'none', marginRight: '10px' }}>
-						<Button variant="outlined">Women</Button>
+					<NextLink href="/category/women" style={{ textDecoration: 'none', marginRight: '10px' }}>
+						<Button variant="outlined" className={pathname === '/category/women' ? 'active-button' : ''}>
+							Women
+						</Button>
 					</NextLink>
-					<NextLink href="/" style={{ textDecoration: 'none' }}>
-						<Button variant="outlined">Kids</Button>
+					<NextLink href="/category/kids" style={{ textDecoration: 'none' }}>
+						<Button variant="outlined" className={pathname === '/category/kids' ? 'active-button' : ''}>
+							Kids
+						</Button>
 					</NextLink>
 				</Box>
 

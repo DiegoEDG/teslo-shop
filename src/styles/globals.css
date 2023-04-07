@@ -55,3 +55,9 @@ a {
 	border: 1px solid #fcdab7;
 	color: #1d2d50;
 }
+
+.active-button {
+	color: #1d2d50;
+	background-color: #fcdab7;
+	border: 1px solid #fcdab7;
+}

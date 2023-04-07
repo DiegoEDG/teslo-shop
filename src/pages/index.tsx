@@ -4,7 +4,7 @@ import { Loading } from '../../components/ui';
 import { useProducts } from '../../hooks/useProducts';
 
 export default function HomePage() {
-	const { products, error, loading } = useProducts('/products');
+	const { products, loading } = useProducts('/products');
 
 	return (
 		<ShopLayout title="HomePage" pageDescription="HomePage">

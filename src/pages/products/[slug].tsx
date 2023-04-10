@@ -1,12 +1,18 @@
+import { FC } from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import { ShopLayout } from '../../../components/layout';
 import { ProductSlideshow, SizeSelector } from '../../../components/products';
 import { ItemCounter } from '../../../components/ui';
-import { initialData } from '../../../database/products';
+import { IProduct } from '../../../interfaces';
+import { getProductBySlug, getSlugProducts } from '../../../database';
+import { Paragliding } from '@mui/icons-material';
 
-const product = initialData.products[0];
+interface Props {
+	product: IProduct;
+}
 
-const ProductPage = () => {
+const ProductPage: FC<Props> = ({ product }) => {
 	return (
 		<ShopLayout title={product.title} pageDescription={product.description}>
 			<Grid container spacing={3} mt={3}>
@@ -49,6 +55,42 @@ const ProductPage = () => {
 			</Grid>
 		</ShopLayout>
 	);
+};
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+	const slugs = await getSlugProducts();
+	console.log(slugs);
+	const slugPaths = slugs.map(({ slug }) => ({
+		params: { slug }
+	}));
+	console.log(slugPaths);
+
+	return {
+		paths: slugPaths,
+		fallback: 'blocking'
+	};
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+	const { slug } = ctx.params as { slug: string };
+
+	const product = await getProductBySlug(slug);
+
+	if (!product) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false
+			}
+		};
+	}
+
+	return {
+		props: {
+			product
+		},
+		revalidate: 60 * 60 * 24
+	};
 };
 
 export default ProductPage;

@@ -57,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 	}
 
 	const products = await getProductBySearch(query);
-	console.log(products);
 
 	return {
 		props: {

@@ -21,3 +21,11 @@ export const getSlugProducts = async () => {
 
 	return slugs;
 };
+
+export const getProductBySearch = async (query: string) => {
+	db.connect();
+	const products = await ProductModel.find({ $text: { $search: query } }).lean();
+	db.disconnect();
+
+	return JSON.parse(JSON.stringify(products));
+};

@@ -1,17 +1,22 @@
 import NextLink from 'next/link';
 
-import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, Box, Button, IconButton, Input, Link, Toolbar, Typography } from '@mui/material';
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UIContext } from '../../context/ui/UIContext';
 
 export const Navbar = () => {
-	const { pathname } = useRouter();
+	const [searchValue, setSearchValue] = useState('');
+	const { pathname, push } = useRouter();
 	const { toggleMenu } = useContext(UIContext);
 
 	const handleClick = () => {
 		toggleMenu();
+	};
+
+	const handleSearch = () => {
+		push(`/search/${searchValue}`);
 	};
 
 	return (
@@ -25,7 +30,7 @@ export const Navbar = () => {
 
 				<Box flex={1} />
 
-				<Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+				<Box sx={{ display: { xs: 'none', md: 'block' } }}>
 					<NextLink href="/category/men" style={{ textDecoration: 'none', marginRight: '10px' }}>
 						<Button variant="outlined" className={pathname === '/category/men' ? 'active-button' : ''}>
 							Men
@@ -44,8 +49,19 @@ export const Navbar = () => {
 				</Box>
 
 				<Box flex={1} />
-
-				<IconButton>
+				<Input
+					sx={{ display: { xs: 'none', md: 'flex' } }}
+					autoFocus
+					value={searchValue}
+					onChange={(e) => setSearchValue(e.target.value)}
+					onKeyPress={(e) => (e.key === 'Enter' ? handleSearch() : null)}
+					type="text"
+					placeholder="Buscar..."
+				/>
+				<IconButton onClick={handleSearch} sx={{ display: { xs: 'none', md: 'flex' } }}>
+					<SearchOutlined />
+				</IconButton>
+				<IconButton onClick={handleClick} sx={{ display: { sm: 'block', md: 'none' } }}>
 					<SearchOutlined />
 				</IconButton>
 

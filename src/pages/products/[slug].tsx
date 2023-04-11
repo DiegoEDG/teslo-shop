@@ -1,18 +1,32 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { Box, Button, Chip, Grid, Typography } from '@mui/material';
+import { ICartProduct, IProduct, ISize } from '../../../interfaces';
 import { ShopLayout } from '../../../components/layout';
 import { ProductSlideshow, SizeSelector } from '../../../components/products';
 import { ItemCounter } from '../../../components/ui';
-import { IProduct } from '../../../interfaces';
 import { getProductBySlug, getSlugProducts } from '../../../database';
-import { Paragliding } from '@mui/icons-material';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 
 interface Props {
 	product: IProduct;
 }
 
 const ProductPage: FC<Props> = ({ product }) => {
+	const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+		_id: product._id,
+		image: product.images[0],
+		inStock: product.inStock,
+		price: product.price,
+		size: undefined,
+		slug: product.slug,
+		title: product.title,
+		gender: product.gender,
+		quantity: 1
+	});
+	const selectedSizeHandler = (size: ISize) => {
+		setTempCartProduct({ ...tempCartProduct, size });
+	};
+
 	return (
 		<ShopLayout title={product.title} pageDescription={product.description}>
 			<Grid container spacing={3} mt={3}>
@@ -27,7 +41,6 @@ const ProductPage: FC<Props> = ({ product }) => {
 							{product.title}
 						</Typography>
 						<Typography variant="subtitle1" component="h2">{`$${product.price}`}</Typography>
-
 						{/* Cantidad */}
 						<Box sx={{ my: 2 }}>
 							<Typography variant="subtitle2">Quantity</Typography>
@@ -35,17 +48,32 @@ const ProductPage: FC<Props> = ({ product }) => {
 							<SizeSelector
 								// selectedSize={ product.sizes[2] }
 								sizes={product.sizes}
+								selectedSize={tempCartProduct.size}
+								onSelectedSize={selectedSizeHandler}
 							/>
 						</Box>
-
-						{/* Agregar al carrito */}
-						<Button color="primary" className="circular-btn">
-							Add to cart
-						</Button>
-
-						{/* <Chip label="No hay disponibles" color="error" variant='outlined' /> */}
-
-						{/* Descripción */}
+						{/* Add To Cart */}
+						{product.inStock > 0 ? (
+							tempCartProduct.size ? (
+								<Button color="primary" className="circular-btn">
+									Add to cart
+								</Button>
+							) : (
+								<Chip
+									label="Please select a size"
+									color="error"
+									variant="outlined"
+									sx={{ border: '2px solid red', paddingY: '17px' }}
+								/>
+							)
+						) : (
+							<Chip
+								label="Out Of Stock"
+								color="error"
+								variant="outlined"
+								sx={{ border: '2px solid red', paddingY: '17px' }}
+							/>
+						)}
 						<Box sx={{ mt: 3 }}>
 							<Typography variant="subtitle2">Description</Typography>
 							<Typography variant="body2">{product.description}</Typography>
@@ -59,11 +87,9 @@ const ProductPage: FC<Props> = ({ product }) => {
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 	const slugs = await getSlugProducts();
-	console.log(slugs);
 	const slugPaths = slugs.map(({ slug }) => ({
 		params: { slug }
 	}));
-	console.log(slugPaths);
 
 	return {
 		paths: slugPaths,

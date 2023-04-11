@@ -51,7 +51,6 @@ export const Navbar = () => {
 				<Box flex={1} />
 				<Input
 					sx={{ display: { xs: 'none', md: 'flex' } }}
-					autoFocus
 					value={searchValue}
 					onChange={(e) => setSearchValue(e.target.value)}
 					onKeyPress={(e) => (e.key === 'Enter' ? handleSearch() : null)}

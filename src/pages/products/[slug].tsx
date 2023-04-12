@@ -23,8 +23,17 @@ const ProductPage: FC<Props> = ({ product }) => {
 		gender: product.gender,
 		quantity: 1
 	});
-	const selectedSizeHandler = (size: ISize) => {
+
+	const handleAddProduct = () => {
+		console.log(tempCartProduct);
+	};
+
+	const handlerSelectedSize = (size: ISize) => {
 		setTempCartProduct({ ...tempCartProduct, size });
+	};
+
+	const handlerSelectedQuantity = (quantity: number) => {
+		setTempCartProduct({ ...tempCartProduct, quantity });
 	};
 
 	return (
@@ -44,18 +53,23 @@ const ProductPage: FC<Props> = ({ product }) => {
 						{/* Cantidad */}
 						<Box sx={{ my: 2 }}>
 							<Typography variant="subtitle2">Quantity</Typography>
-							<ItemCounter />
+							<ItemCounter
+								minValue={1}
+								maxValue={tempCartProduct.inStock}
+								onSelectedQuantity={handlerSelectedQuantity}
+							/>
+							{/* Size */}
 							<SizeSelector
 								// selectedSize={ product.sizes[2] }
 								sizes={product.sizes}
 								selectedSize={tempCartProduct.size}
-								onSelectedSize={selectedSizeHandler}
+								onSelectedSize={handlerSelectedSize}
 							/>
 						</Box>
 						{/* Add To Cart */}
 						{product.inStock > 0 ? (
 							tempCartProduct.size ? (
-								<Button color="primary" className="circular-btn">
+								<Button color="primary" className="circular-btn" onClick={handleAddProduct}>
 									Add to cart
 								</Button>
 							) : (

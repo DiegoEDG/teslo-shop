@@ -1,17 +1,36 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
 
-interface Props {}
+interface Props {
+	minValue: number;
+	maxValue: number;
+	onSelectedQuantity: (quantity: number) => void;
+}
 
-export const ItemCounter: FC<Props> = () => {
+export const ItemCounter: FC<Props> = ({ minValue, maxValue, onSelectedQuantity }) => {
+	const [qtyValue, setQtyValue] = useState(minValue);
+
+	const handleQty = (op: string) => {
+		if (op === '-') {
+			setQtyValue((currentValue) => (currentValue <= minValue ? minValue : --currentValue));
+			onSelectedQuantity(qtyValue - 1);
+		} else {
+			setQtyValue((currentValue) => (currentValue >= maxValue ? maxValue : ++currentValue));
+			onSelectedQuantity(qtyValue + 1);
+		}
+	};
+
 	return (
 		<Box display="flex" alignItems="center">
-			<IconButton>
+			<IconButton onClick={() => handleQty('-')}>
 				<RemoveCircleOutline />
 			</IconButton>
-			<Typography sx={{ width: 40, textAlign: 'center' }}> 1 </Typography>
-			<IconButton>
+			<Typography sx={{ width: 40, textAlign: 'center' }}>
+				{' '}
+				{qtyValue < minValue ? minValue : qtyValue > maxValue ? maxValue : qtyValue}{' '}
+			</Typography>
+			<IconButton onClick={() => handleQty('+')}>
 				<AddCircleOutline />
 			</IconButton>
 		</Box>

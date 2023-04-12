@@ -4,7 +4,7 @@ import { CartState } from './CartProvider';
 type CartActionType =
 	| { type: '[Cart] Get Products'; payload: ICartProduct[] }
 	| { type: '[Cart] Add Product'; payload: ICartProduct }
-	| { type: '[Cart] Update Qty'; payload: ICartProduct };
+	| { type: '[Cart] Update Qty'; payload: ICartProduct[] };
 
 const cartReducer = (state: CartState, action: CartActionType): CartState => {
 	switch (action.type) {
@@ -22,15 +22,7 @@ const cartReducer = (state: CartState, action: CartActionType): CartState => {
 		case '[Cart] Update Qty':
 			return {
 				...state,
-				cart: [
-					...state.cart.map((prodOnCart) =>
-						prodOnCart._id != action.payload._id
-							? prodOnCart
-							: prodOnCart.size === action.payload.size
-							? action.payload
-							: prodOnCart
-					)
-				]
+				cart: action.payload
 			};
 
 		default:

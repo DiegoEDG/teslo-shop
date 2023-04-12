@@ -30,7 +30,7 @@ const ProductPage: FC<Props> = ({ product }) => {
 
 	const handleAddProduct = () => {
 		addProduct(tempCartProduct);
-		push('/cart');
+		// push('/cart');
 	};
 
 	const handlerSelectedSize = (size: ISize) => {

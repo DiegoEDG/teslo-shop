@@ -1,15 +1,16 @@
+import { useContext, useState } from 'react';
 import NextLink from 'next/link';
-
+import { useRouter } from 'next/router';
 import { AppBar, Badge, Box, Button, IconButton, Input, Link, Toolbar, Typography } from '@mui/material';
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
-import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
-import { UIContext } from '../../context/ui/UIContext';
+import { CartContext, UIContext } from '../../context';
 
 export const Navbar = () => {
 	const [searchValue, setSearchValue] = useState('');
 	const { pathname, push } = useRouter();
 	const { toggleMenu } = useContext(UIContext);
+
+	const { productsQty } = useContext(CartContext);
 
 	const handleClick = () => {
 		toggleMenu();
@@ -66,7 +67,7 @@ export const Navbar = () => {
 
 				<NextLink href="/checkout/summary">
 					<IconButton>
-						<Badge badgeContent={2} color="secondary">
+						<Badge badgeContent={productsQty} color="secondary">
 							<ShoppingCartOutlined />
 						</Badge>
 					</IconButton>

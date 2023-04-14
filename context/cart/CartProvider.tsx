@@ -1,15 +1,23 @@
 import { FC, PropsWithChildren, useEffect, useReducer, useState } from 'react';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, ISummaryInfo } from '../../interfaces';
 import { CartContext } from './CartContext';
 import cartReducer from './cartReducer';
 import Cookie from 'js-cookie';
 
 export interface CartState {
 	cart: ICartProduct[];
+	productsQty: number;
+	subTotal: number;
+	taxes: number;
+	total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
-	cart: []
+	cart: [],
+	productsQty: 0,
+	subTotal: 0,
+	taxes: 0,
+	total: 0
 };
 
 const CartProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -19,7 +27,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 		try {
 			const cookieCart = JSON.parse(Cookie.get('cart') ?? '[]');
 			if (cookieCart.length > 0) dispatch({ type: '[Cart] Get Products From Cookies', payload: cookieCart });
-			console.log('Getting Cookie', { cookieCart });
 		} catch (err) {
 			console.log(err);
 		}
@@ -27,7 +34,17 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
 	useEffect(() => {
 		Cookie.set('cart', JSON.stringify(state.cart));
-		console.log('Setting Cookie');
+	}, [state.cart]);
+
+	useEffect(() => {
+		const productsQty = state.cart.reduce((prev, curr) => curr.quantity + prev, 0);
+		const subTotal = state.cart.reduce((prev, curr) => curr.price * curr.quantity + prev, 0);
+		const taxes = subTotal * Number(process.env.NEXT_PUBLIC_TAX_RATE);
+		const total = taxes + subTotal;
+
+		const summaryInfo = { productsQty, subTotal, taxes, total };
+
+		updateSummaryInfo(summaryInfo);
 	}, [state.cart]);
 
 	const addProduct = (product: ICartProduct) => {
@@ -62,11 +79,14 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
 	const deleteCartProduct = (product: ICartProduct) => {
 		const cartUpdated = state.cart.filter(
-			(productInCart) => productInCart._id === product._id && productInCart.size === product.size
+			(productInCart) => !(productInCart._id === product._id && productInCart.size === product.size)
 		);
-		console.log(cartUpdated);
 
 		dispatch({ type: '[Cart] Delete Product From Cart', payload: cartUpdated });
+	};
+
+	const updateSummaryInfo = (summaryInfo: ISummaryInfo) => {
+		dispatch({ type: '[Cart] Update Summary Info', payload: summaryInfo });
 	};
 
 	return (

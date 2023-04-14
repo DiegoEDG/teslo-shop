@@ -1,4 +1,5 @@
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import Link from 'next/link';
 import { CartList, OrderSummary } from '../../../components/cart';
 import { ShopLayout } from '../../../components/layout';
 
@@ -22,9 +23,11 @@ const CartPage = () => {
 							<OrderSummary />
 
 							<Box sx={{ mt: 3 }}>
-								<Button color="secondary" className="circular-btn" fullWidth>
-									Checkout
-								</Button>
+								<Link href="/checkout/summary" style={{ textDecoration: 'none' }}>
+									<Button color="secondary" className="circular-btn" fullWidth>
+										Checkout
+									</Button>
+								</Link>
 							</Box>
 						</CardContent>
 					</Card>

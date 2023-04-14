@@ -20,7 +20,7 @@ interface SeedUser {
 	name: string;
 	email: string;
 	password: string;
-	role: 'admin' | 'clien';
+	role: 'admin' | 'client';
 }
 
 interface SeedData {
@@ -40,7 +40,7 @@ export const initialData: SeedData = {
 			name: 'Yun',
 			email: 'yun@mail.com',
 			password: bcrypt.hashSync('123456'),
-			role: 'admin'
+			role: 'client'
 		}
 	],
 	products: [

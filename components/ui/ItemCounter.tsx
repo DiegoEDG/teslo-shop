@@ -1,14 +1,16 @@
 import { FC, useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
+import { IProduct } from '../../interfaces';
 
 interface Props {
 	minValue: number;
 	maxValue: number;
+	qtyCartProd?: number;
 	onSelectedQuantity: (quantity: number) => void;
 }
 
-export const ItemCounter: FC<Props> = ({ minValue, maxValue, onSelectedQuantity }) => {
+export const ItemCounter: FC<Props> = ({ minValue, maxValue, onSelectedQuantity, qtyCartProd }) => {
 	const [qtyValue, setQtyValue] = useState(minValue);
 
 	const handleQty = (op: string) => {
@@ -27,8 +29,7 @@ export const ItemCounter: FC<Props> = ({ minValue, maxValue, onSelectedQuantity 
 				<RemoveCircleOutline />
 			</IconButton>
 			<Typography sx={{ width: 40, textAlign: 'center' }}>
-				{' '}
-				{qtyValue < minValue ? minValue : qtyValue > maxValue ? maxValue : qtyValue}{' '}
+				{qtyCartProd ? qtyCartProd : qtyValue < minValue ? minValue : qtyValue > maxValue ? maxValue : qtyValue}
 			</Typography>
 			<IconButton onClick={() => handleQty('+')}>
 				<AddCircleOutline />

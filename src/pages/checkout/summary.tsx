@@ -1,10 +1,13 @@
+import { useContext } from 'react';
 import NextLink from 'next/link';
-
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { ShopLayout } from '../../../components/layout';
 import { CartList, OrderSummary } from '../../../components/cart';
+import { CartContext } from '../../../context/cart/CartContext';
 
 const SummaryPage = () => {
+	const { cart } = useContext(CartContext);
+
 	return (
 		<ShopLayout title="Order Summary" pageDescription={'Resumen de la orden'}>
 			<Typography variant="h1" component="h1" mb={3}>
@@ -13,12 +16,12 @@ const SummaryPage = () => {
 
 			<Grid container>
 				<Grid item xs={12} sm={7}>
-					<CartList />
+					<CartList editable={true} />
 				</Grid>
 				<Grid item xs={12} sm={5}>
 					<Card className="summary-card">
 						<CardContent>
-							<Typography variant="h2">Summary (3 products)</Typography>
+							<Typography variant="h2">Summary - ({cart.length}) Products</Typography>
 							<Divider sx={{ my: 1 }} />
 
 							<Box display="flex" justifyContent="space-between">

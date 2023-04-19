@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useReducer, useState } from 'react';
+import { FC, PropsWithChildren, useEffect, useReducer } from 'react';
 import { ICartProduct, ISummaryInfo } from '../../interfaces';
 import { CartContext } from './CartContext';
 import cartReducer from './cartReducer';

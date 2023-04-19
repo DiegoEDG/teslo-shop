@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ICartProduct, ISummaryInfo } from '../../interfaces';
+import { ICartProduct } from '../../interfaces';
 
 export interface CartContextProps {
 	cart: ICartProduct[];

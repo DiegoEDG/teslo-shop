@@ -1,12 +1,25 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { ShopLayout } from '../../../components/layout';
 import { CartList, OrderSummary } from '../../../components/cart';
 import { CartContext } from '../../../context/cart/CartContext';
+import { Loading } from '../../../components/ui';
 
 const SummaryPage = () => {
 	const { cart, productsQty } = useContext(CartContext);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (cart.length === 0) {
+			router.replace('/cart/empty');
+		}
+	}, [cart]);
+
+	if (cart.length === 0) {
+		return <Loading />;
+	}
 
 	return (
 		<ShopLayout title="Order Summary" pageDescription={'Resumen de la orden'}>

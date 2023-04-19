@@ -23,6 +23,7 @@ const RegisterPage = () => {
 		handleSubmit,
 		formState: { errors }
 	} = useForm<FormData>();
+	const lastPath = router.query.p?.toString() || '/';
 
 	const onSignUp = async (formData: FormData) => {
 		setShowError(false);
@@ -35,7 +36,7 @@ const RegisterPage = () => {
 			}, 3000);
 		}
 
-		if (isLoggedIn) router.replace('/');
+		router.replace(lastPath);
 	};
 
 	return (
@@ -104,7 +105,7 @@ const RegisterPage = () => {
 						</Grid>
 
 						<Grid item xs={12} display="flex" justifyContent="end">
-							<NextLink href="/auth/login">Already have an account?</NextLink>
+							<NextLink href={`/auth/login?p=${lastPath}`}>Already have an account?</NextLink>
 						</Grid>
 					</Grid>
 				</Box>

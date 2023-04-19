@@ -6,7 +6,6 @@ import { AuthLayout } from '../../../components/layout';
 import { isEmail } from '../../../utils';
 import { ErrorOutline } from '@mui/icons-material';
 import { AuthContext } from '../../../context';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
 type FormData = {
@@ -16,17 +15,17 @@ type FormData = {
 
 const LoginPage = () => {
 	const [showError, setShowError] = useState(false);
-	const { logIn, userData } = useContext(AuthContext);
+	const { logIn } = useContext(AuthContext);
 	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
 	} = useForm<FormData>();
+	const lastPath = router.query.p?.toString() || '/';
 
 	const onLogin = async (formData: FormData) => {
 		setShowError(false);
-
 		const isLoggedIn = await logIn(formData);
 
 		if (!isLoggedIn) {
@@ -37,7 +36,7 @@ const LoginPage = () => {
 			return;
 		}
 
-		if (isLoggedIn) router.replace('/');
+		router.replace(lastPath);
 	};
 
 	return (
@@ -93,7 +92,7 @@ const LoginPage = () => {
 						</Grid>
 
 						<Grid item xs={12} display="flex" justifyContent="end">
-							<NextLink href="/auth/register">Does´t have an account?</NextLink>
+							<NextLink href={`/auth/register?p=${lastPath}`}>Does´t have an account?</NextLink>
 						</Grid>
 					</Grid>
 				</Box>

@@ -127,8 +127,8 @@ export const SideMenu = () => {
 					</ListItem>
 
 					{!isLoggedIn && (
-						<Link href={'/auth/login'} style={{ textDecoration: 'none' }}>
-							<ListItem button>
+						<Link href={`/auth/login?p=${router.pathname}`} style={{ textDecoration: 'none' }}>
+							<ListItem button onClick={toggleMenu}>
 								<ListItemIcon>
 									<VpnKeyOutlined />
 								</ListItemIcon>

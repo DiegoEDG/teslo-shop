@@ -1,13 +1,14 @@
 import { FC, PropsWithChildren, useReducer, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { tesloApi } from '../../api';
-import { IUser } from '../../interfaces';
+import { UserLoggedIn } from '../../interfaces';
 import { AuthContext } from './AuthContext';
 import authReducer from './authReducer';
 import Cookies from 'js-cookie';
 
 export interface AuthState {
 	isLoggedIn: boolean;
-	userData?: IUser;
+	userData?: UserLoggedIn;
 }
 
 const AUTH_INITIAL_STATE: AuthState = {
@@ -23,6 +24,7 @@ export type PayloadUser = {
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 	const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+	const router = useRouter();
 
 	useEffect(() => {
 		checkToken();
@@ -71,13 +73,21 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 		}
 	};
 
+	const logOut = () => {
+		Cookies.remove('token');
+		Cookies.remove('cart');
+		dispatch({ type: '[Auth] Logout' });
+		router.reload();
+	};
+
 	return (
 		<AuthContext.Provider
 			value={{
 				...state,
 				// Methods
 				logIn,
-				registerCtx
+				registerCtx,
+				logOut
 			}}
 		>
 			{children}

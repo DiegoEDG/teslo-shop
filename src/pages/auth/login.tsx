@@ -16,7 +16,7 @@ type FormData = {
 
 const LoginPage = () => {
 	const [showError, setShowError] = useState(false);
-	const { logIn } = useContext(AuthContext);
+	const { logIn, userData } = useContext(AuthContext);
 	const router = useRouter();
 	const {
 		register,
@@ -28,7 +28,6 @@ const LoginPage = () => {
 		setShowError(false);
 
 		const isLoggedIn = await logIn(formData);
-		console.log(isLoggedIn);
 
 		if (!isLoggedIn) {
 			setShowError(true);

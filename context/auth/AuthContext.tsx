@@ -1,13 +1,14 @@
 import { createContext } from 'react';
-import { IUser } from '../../interfaces';
+import { UserLoggedIn } from '../../interfaces';
 import { PayloadUser } from './AuthProvider';
 
 export interface AuthContextProps {
 	isLoggedIn: boolean;
-	userData?: IUser;
+	userData?: UserLoggedIn;
 	// Methods
 	logIn: (userData: PayloadUser) => Promise<boolean>;
 	registerCtx: (userData: PayloadUser) => Promise<boolean>;
+	logOut: () => void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);

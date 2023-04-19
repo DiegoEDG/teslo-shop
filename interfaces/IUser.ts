@@ -7,3 +7,12 @@ export interface IUser {
 	createdAt?: string;
 	updatedAt?: string;
 }
+
+export interface UserLoggedIn {
+	token: string;
+	user: {
+		name: string;
+		email: string;
+		role: string;
+	};
+}

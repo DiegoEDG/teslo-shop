@@ -16,11 +16,11 @@ type Data =
 
 export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
 	switch (req.method) {
-		case 'POST':
+		case 'GET':
 			return validateToken(req, res);
 
 		default:
-			return res.status(200).json({ message: 'Example' });
+			return res.status(200).json({ message: 'Bad Request' });
 	}
 }
 

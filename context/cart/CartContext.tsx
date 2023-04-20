@@ -1,7 +1,8 @@
 import { createContext } from 'react';
-import { ICartProduct } from '../../interfaces';
+import { IAddressInfo, ICartProduct } from '../../interfaces';
 
 export interface CartContextProps {
+	addressInfo?: IAddressInfo;
 	cart: ICartProduct[];
 	productsQty: number;
 	subTotal: number;
@@ -10,6 +11,7 @@ export interface CartContextProps {
 	addProduct: (product: ICartProduct) => void;
 	updateCartQuantity: (product: ICartProduct) => void;
 	deleteCartProduct: (product: ICartProduct) => void;
+	updateAddressInfo: (addressInfo: IAddressInfo) => void;
 }
 
 export const CartContext = createContext({} as CartContextProps);

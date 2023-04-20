@@ -1,10 +1,11 @@
 import { FC, PropsWithChildren, useEffect, useReducer } from 'react';
-import { ICartProduct, ISummaryInfo } from '../../interfaces';
+import { IAddressInfo, ICartProduct, ISummaryInfo } from '../../interfaces';
 import { CartContext } from './CartContext';
 import cartReducer from './cartReducer';
 import Cookie from 'js-cookie';
 
 export interface CartState {
+	addressInfo?: IAddressInfo;
 	cart: ICartProduct[];
 	productsQty: number;
 	subTotal: number;
@@ -13,6 +14,7 @@ export interface CartState {
 }
 
 const CART_INITIAL_STATE: CartState = {
+	addressInfo: undefined,
 	cart: [],
 	productsQty: 0,
 	subTotal: 0,
@@ -33,8 +35,22 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
+		try {
+			const cookieAddress: IAddressInfo = JSON.parse(Cookie.get('addressInfo') ?? '{}');
+			console.log(cookieAddress);
+			dispatch({ type: '[Cart] Get Address From Cookies', payload: cookieAddress });
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
+
+	useEffect(() => {
 		Cookie.set('cart', JSON.stringify(state.cart));
 	}, [state.cart]);
+
+	useEffect(() => {
+		Cookie.set('addressInfo', JSON.stringify(state.addressInfo));
+	}, [state.addressInfo]);
 
 	useEffect(() => {
 		const productsQty = state.cart.reduce((prev, curr) => curr.quantity + prev, 0);
@@ -89,8 +105,12 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 		dispatch({ type: '[Cart] Update Summary Info', payload: summaryInfo });
 	};
 
+	const updateAddressInfo = (addressInfo: IAddressInfo) => {
+		dispatch({ type: '[Cart] Get Address From Cookies', payload: addressInfo });
+	};
+
 	return (
-		<CartContext.Provider value={{ ...state, addProduct, updateCartQuantity, deleteCartProduct }}>
+		<CartContext.Provider value={{ ...state, addProduct, updateCartQuantity, deleteCartProduct, updateAddressInfo }}>
 			{children}
 		</CartContext.Provider>
 	);

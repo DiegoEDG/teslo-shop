@@ -1,4 +1,4 @@
-export * from './IAddress';
+export * from './IAddressInfo';
 export * from './ICartProduct';
 export * from './ISummaryInfo';
 export * from './IUser';

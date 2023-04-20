@@ -2,25 +2,24 @@ import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from 
 import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import { ShopLayout } from '../../../components/layout';
-import { IAddress } from '../../../interfaces';
+import { IAddressInfo } from '../../../interfaces';
 import { countries } from '../../../utils';
-
-const getAddres = () => {
-	const formValues: IAddress = JSON.parse(Cookies.get('addressInfo') || '{}');
-	return formValues;
-};
+import { useContext } from 'react';
+import { CartContext } from '../../../context';
 
 const AddressPage = () => {
+	const { addressInfo, updateAddressInfo } = useContext(CartContext);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<IAddress>({
-		defaultValues: getAddres()
+	} = useForm<IAddressInfo>({
+		defaultValues: addressInfo
 	});
 
-	const onCheckout = (data: IAddress) => {
+	const onCheckout = (data: IAddressInfo) => {
 		Cookies.set('addressInfo', JSON.stringify(data));
+		updateAddressInfo(data);
 	};
 
 	return (

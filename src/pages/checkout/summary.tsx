@@ -6,6 +6,7 @@ import { ShopLayout } from '../../../components/layout';
 import { CartList, OrderSummary } from '../../../components/cart';
 import { CartContext } from '../../../context/cart/CartContext';
 import { Loading } from '../../../components/ui';
+import Link from 'next/link';
 
 const SummaryPage = () => {
 	const { cart, productsQty } = useContext(CartContext);
@@ -63,9 +64,11 @@ const SummaryPage = () => {
 							<OrderSummary />
 
 							<Box sx={{ mt: 3 }}>
-								<Button color="secondary" className="circular-btn" fullWidth>
-									Confirm Orden
-								</Button>
+								<Link href="/checkout/address" style={{ textDecoration: 'none' }}>
+									<Button color="secondary" className="circular-btn" fullWidth>
+										Confirm Orden
+									</Button>
+								</Link>
 							</Box>
 						</CardContent>
 					</Card>

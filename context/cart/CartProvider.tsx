@@ -37,8 +37,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 	useEffect(() => {
 		try {
 			const cookieAddress: IAddressInfo = JSON.parse(Cookie.get('addressInfo') ?? '{}');
-			console.log(cookieAddress);
-			dispatch({ type: '[Cart] Get Address From Cookies', payload: cookieAddress });
+			if (cookieAddress.address1) dispatch({ type: '[Cart] Get Address From Cookies', payload: cookieAddress });
 		} catch (err) {
 			console.log(err);
 		}

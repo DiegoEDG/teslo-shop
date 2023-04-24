@@ -1,14 +1,16 @@
+import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import { ShopLayout } from '../../../components/layout';
 import { IAddressInfo } from '../../../interfaces';
 import { countries } from '../../../utils';
-import { useContext } from 'react';
 import { CartContext } from '../../../context';
 
 const AddressPage = () => {
 	const { addressInfo, updateAddressInfo } = useContext(CartContext);
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -20,6 +22,7 @@ const AddressPage = () => {
 	const onCheckout = (data: IAddressInfo) => {
 		Cookies.set('addressInfo', JSON.stringify(data));
 		updateAddressInfo(data);
+		router.push('/checkout/summary');
 	};
 
 	return (
@@ -35,7 +38,6 @@ const AddressPage = () => {
 							label="First Name"
 							variant="filled"
 							fullWidth
-							// value={formValues.firstName}
 							{...register('firstName', {
 								required: 'First Name is required'
 							})}

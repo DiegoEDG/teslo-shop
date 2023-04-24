@@ -1,10 +1,10 @@
-import { IUser } from '../../interfaces';
 import { AuthState } from './AuthProvider';
+import { UserLoggedIn } from '../../interfaces/IUser';
 
 type AuthActionType =
-	| { type: '[Auth] Login'; payload: IUser }
+	| { type: '[Auth] Login'; payload: UserLoggedIn }
 	| { type: '[Auth] Logout' }
-	| { type: '[Auth] Revalidate User'; payload: IUser };
+	| { type: '[Auth] Revalidate User'; payload: UserLoggedIn };
 
 const authReducer = (state: AuthState, action: AuthActionType): AuthState => {
 	switch (action.type) {

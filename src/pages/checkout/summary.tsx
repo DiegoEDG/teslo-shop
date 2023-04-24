@@ -6,14 +6,15 @@ import { ShopLayout } from '../../../components/layout';
 import { CartList, OrderSummary } from '../../../components/cart';
 import { CartContext } from '../../../context/cart/CartContext';
 import { Loading } from '../../../components/ui';
-import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 const SummaryPage = () => {
-	const { cart, productsQty } = useContext(CartContext);
+	const { cart, productsQty, addressInfo } = useContext(CartContext);
 	const router = useRouter();
 
 	useEffect(() => {
-		if (cart.length === 0) {
+		const cartInCookies = Cookies.get('cart');
+		if (!cartInCookies) {
 			router.replace('/cart/empty');
 		}
 	}, [cart]);
@@ -22,8 +23,12 @@ const SummaryPage = () => {
 		return <Loading />;
 	}
 
+	const onConfirm = () => {
+		console.log({ cart, addressInfo });
+	};
+
 	return (
-		<ShopLayout title="Order Summary" pageDescription={'Resumen de la orden'}>
+		<ShopLayout title="Order Summary" pageDescription={'Order Summary'}>
 			<Typography variant="h1" component="h1" mb={3}>
 				Order Summary
 			</Typography>
@@ -40,18 +45,29 @@ const SummaryPage = () => {
 							</Typography>
 							<Divider sx={{ my: 1 }} />
 
-							<Box display="flex" justifyContent="space-between">
-								<Typography variant="subtitle1">Delivery address</Typography>
-								<NextLink href="/checkout/address" style={{ color: '#fcdab7' }}>
-									Edit
-								</NextLink>
-							</Box>
+							{!addressInfo?.address1 ? (
+								<>
+									<Typography variant="h6">Delivery Address missing</Typography>
+									<NextLink href="/checkout/address" style={{ color: '#fcdab7' }}>
+										Please add an Address
+									</NextLink>
+								</>
+							) : (
+								<>
+									<Box display="flex" justifyContent="space-between">
+										<Typography variant="subtitle1">Delivery address</Typography>
 
-							<Typography>Fernando Herrera</Typography>
-							<Typography>323 Algun lugar</Typography>
-							<Typography>Stittsville, HYA 23S</Typography>
-							<Typography>Canadá</Typography>
-							<Typography>+1 23123123</Typography>
+										<NextLink href="/checkout/address" style={{ color: '#fcdab7' }}>
+											Edit
+										</NextLink>
+									</Box>
+
+									<Typography>{`${addressInfo.firstName} ${addressInfo.lastName}`}</Typography>
+									<Typography>{`${addressInfo.address1} ${addressInfo.address2} - ${addressInfo.zipCode}`}</Typography>
+									<Typography>{`${addressInfo.city}, ${addressInfo.country}`}</Typography>
+									<Typography>{addressInfo.phone}</Typography>
+								</>
+							)}
 
 							<Divider sx={{ my: 1 }} />
 
@@ -64,11 +80,11 @@ const SummaryPage = () => {
 							<OrderSummary />
 
 							<Box sx={{ mt: 3 }}>
-								<Link href="/checkout/address" style={{ textDecoration: 'none' }}>
-									<Button color="secondary" className="circular-btn" fullWidth>
+								{addressInfo?.address1 && (
+									<Button color="secondary" className="circular-btn" fullWidth onClick={onConfirm}>
 										Confirm Orden
 									</Button>
-								</Link>
+								)}
 							</Box>
 						</CardContent>
 					</Card>

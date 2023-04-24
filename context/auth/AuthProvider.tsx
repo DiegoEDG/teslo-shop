@@ -16,12 +16,6 @@ const AUTH_INITIAL_STATE: AuthState = {
 	userData: undefined
 };
 
-export type PayloadUser = {
-	name?: string;
-	email: string;
-	password: string;
-};
-
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 	const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 	const router = useRouter();
@@ -42,7 +36,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 		}
 	};
 
-	const logIn = async (userData: PayloadUser): Promise<boolean> => {
+	const logIn = async (userData: UserLoggedIn): Promise<boolean> => {
 		try {
 			const { data } = await tesloApi.post('/user/login', userData);
 			if (data.token) {
@@ -57,7 +51,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 		}
 	};
 
-	const registerCtx = async (userData: PayloadUser): Promise<boolean> => {
+	const registerCtx = async (userData: UserLoggedIn): Promise<boolean> => {
 		try {
 			const { data } = await tesloApi.post('/user/register', userData);
 			console.log('register provider fn', data);

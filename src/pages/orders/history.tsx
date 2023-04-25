@@ -1,8 +1,41 @@
+import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
-
 import { Typography, Grid, Chip } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { ShopLayout } from '../../../components/layout';
+import { verifyToken } from '../../../utils';
+import { getOrdersByUserId } from '../../../database';
+import { IOrder } from '../../../interfaces';
+import { FC } from 'react';
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+	const { token } = req.cookies;
+
+	if (!token) {
+		return {
+			redirect: {
+				destination: `/auth/login?p=/orders/history`,
+				permanent: false
+			}
+		};
+	}
+
+	const userId = await verifyToken(token!);
+	const orders = await getOrdersByUserId(userId);
+
+	const rows = orders.map((order: IOrder, idx: number) => ({
+		id: idx + 1,
+		paid: order.isPaid,
+		fullname: `${order.addressInfo.firstName} ${order.addressInfo.lastName}`,
+		orderId: order._id
+	}));
+
+	return {
+		props: {
+			rows
+		}
+	};
+};
 
 const columns: GridColDef[] = [
 	{ field: 'id', headerName: 'ID', width: 100 },
@@ -27,7 +60,7 @@ const columns: GridColDef[] = [
 		sortable: false,
 		renderCell: (params: GridRenderCellParams) => {
 			return (
-				<NextLink href={`/orders/${params.row.id}`} style={{ color: '#fcdab7' }}>
+				<NextLink href={`/orders/${params.row.orderId}`} style={{ color: '#fcdab7' }}>
 					See order
 				</NextLink>
 			);
@@ -35,25 +68,20 @@ const columns: GridColDef[] = [
 	}
 ];
 
-const rows = [
-	{ id: 1, paid: true, fullname: 'Fernando Herrera' },
-	{ id: 2, paid: false, fullname: 'Melissa Flores' },
-	{ id: 3, paid: true, fullname: 'Hernando Vallejo' },
-	{ id: 4, paid: false, fullname: 'Emin Reyes' },
-	{ id: 5, paid: false, fullname: 'Eduardo Rios' },
-	{ id: 6, paid: true, fullname: 'Natalia Herrera' }
-];
+interface Props {
+	rows: [];
+}
 
-const HistoryPage = () => {
+const HistoryPage: FC<Props> = ({ rows }) => {
 	return (
-		<ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de ordenes del cliente'}>
+		<ShopLayout title={'Orders History'} pageDescription={'Client Order History'}>
 			<Typography variant="h1" component="h1" mb={3}>
 				Order History
 			</Typography>
 
 			<Grid container>
 				<Grid item xs={12} sx={{ height: 650, width: '100%' }}>
-					<DataGrid rows={rows} columns={columns} pageSizeOptions={[10]} style={{ border: '1px solid #fcdab7' }} />
+					<DataGrid rows={rows} columns={columns} pageSizeOptions={[100]} style={{ border: '1px solid #fcdab7' }} />
 				</Grid>
 			</Grid>
 		</ShopLayout>

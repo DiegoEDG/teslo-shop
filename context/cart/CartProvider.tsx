@@ -1,8 +1,9 @@
 import { FC, PropsWithChildren, useEffect, useReducer } from 'react';
-import { IAddressInfo, ICartProduct, ISummaryInfo } from '../../interfaces';
+import { IAddressInfo, ICartProduct, ISummaryInfo, IOrder } from '../../interfaces';
 import { CartContext } from './CartContext';
 import cartReducer from './cartReducer';
 import Cookie from 'js-cookie';
+import { tesloApi } from '../../api';
 
 export interface CartState {
 	addressInfo?: IAddressInfo;
@@ -39,7 +40,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 			const cookieAddress: IAddressInfo = JSON.parse(Cookie.get('addressInfo') ?? '{}');
 			if (cookieAddress.address1) dispatch({ type: '[Cart] Get Address From Cookies', payload: cookieAddress });
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 		}
 	}, []);
 
@@ -108,8 +109,42 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 		dispatch({ type: '[Cart] Get Address From Cookies', payload: addressInfo });
 	};
 
+	const createOrder = async (userId: string): Promise<IOrder | null> => {
+		if (!state.addressInfo) {
+			throw Error('[CartProvider] Address info is missing');
+		}
+		if (!userId) {
+			throw Error('[CartProvider] User not authenticated');
+		}
+		if (!state.cart) {
+			throw Error('[CartProvider] Cart is empty');
+		}
+
+		const newOrder: IOrder = {
+			orderItems: state.cart.map((product) => ({ ...product, size: product.size! })),
+			addressInfo: state.addressInfo,
+			user: userId,
+			isPaid: false,
+			productsQty: state.productsQty,
+			subTotal: state.subTotal,
+			taxes: state.taxes,
+			total: state.total
+		};
+
+		try {
+			const { data } = await tesloApi.post<IOrder>('/orders', newOrder);
+			dispatch({ type: '[Cart] Order Created', payload: data });
+			return data;
+		} catch (error) {
+			console.log('[CartProvider] Error in api', error);
+			return null;
+		}
+	};
+
 	return (
-		<CartContext.Provider value={{ ...state, addProduct, updateCartQuantity, deleteCartProduct, updateAddressInfo }}>
+		<CartContext.Provider
+			value={{ ...state, addProduct, updateCartQuantity, deleteCartProduct, updateAddressInfo, createOrder }}
+		>
 			{children}
 		</CartContext.Provider>
 	);

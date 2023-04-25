@@ -3,14 +3,17 @@ import NextLink from 'next/link';
 import { Box, Button, CardActionArea, CardMedia, Grid, Typography } from '@mui/material';
 import { ItemCounter } from '../ui';
 import { CartContext } from '../../context';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 
 interface Props {
 	editable?: boolean;
+	orderProducts?: IOrderItem[];
 }
 
-export const CartList: FC<Props> = ({ editable = false }) => {
+export const CartList: FC<Props> = ({ editable, orderProducts }) => {
 	const { cart, updateCartQuantity, deleteCartProduct } = useContext(CartContext);
+
+	const products = orderProducts ? orderProducts : cart;
 
 	const handlerSelectedQuantity = (quantity: number, productOnCart: ICartProduct) => {
 		productOnCart.quantity = quantity;
@@ -22,7 +25,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 	};
 	return (
 		<>
-			{cart.map((product: ICartProduct) => (
+			{products.map((product) => (
 				<Grid container spacing={2} key={product.slug + product.size} sx={{ mb: 1 }}>
 					<Grid item xs={3}>
 						{/* TODO: llevar a la página del producto */}
@@ -55,7 +58,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 						<Typography variant="subtitle1">{`$${product.price}`}</Typography>
 
 						{editable && (
-							<Button variant="text" color="primary" onClick={() => handleDelete(product)}>
+							<Button variant="text" color="primary" onClick={() => handleDelete(product as ICartProduct)}>
 								Remove
 							</Button>
 						)}

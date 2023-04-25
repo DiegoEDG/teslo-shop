@@ -9,6 +9,7 @@ type Data =
 	| {
 			token: string;
 			user: {
+				id: string;
 				name: string;
 				email: string;
 				role: string;
@@ -42,6 +43,7 @@ async function authUser(req: NextApiRequest, res: NextApiResponse<Data>) {
 	return res.status(200).json({
 		token,
 		user: {
+			id: user._id,
 			name: user.name,
 			email: user.email,
 			role: user.role

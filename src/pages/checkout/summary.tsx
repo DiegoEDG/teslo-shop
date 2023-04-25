@@ -4,17 +4,18 @@ import NextLink from 'next/link';
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { ShopLayout } from '../../../components/layout';
 import { CartList, OrderSummary } from '../../../components/cart';
-import { CartContext } from '../../../context/cart/CartContext';
+import { CartContext, AuthContext } from '../../../context';
 import { Loading } from '../../../components/ui';
 import Cookies from 'js-cookie';
 
 const SummaryPage = () => {
-	const { cart, productsQty, addressInfo } = useContext(CartContext);
+	const { cart, productsQty, addressInfo, createOrder } = useContext(CartContext);
+	const { userData } = useContext(AuthContext);
 	const router = useRouter();
 
 	useEffect(() => {
-		const cartInCookies = Cookies.get('cart');
-		if (!cartInCookies) {
+		const cartInCookies = JSON.parse(Cookies.get('cart')!);
+		if (cartInCookies?.length === 0 && cart.length === 0) {
 			router.replace('/cart/empty');
 		}
 	}, [cart]);
@@ -23,8 +24,9 @@ const SummaryPage = () => {
 		return <Loading />;
 	}
 
-	const onConfirm = () => {
-		console.log({ cart, addressInfo });
+	const onConfirm = async () => {
+		const order = await createOrder(userData?.user.id);
+		router.push(`/orders/${order?._id}`);
 	};
 
 	return (

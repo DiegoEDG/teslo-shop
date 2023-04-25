@@ -8,6 +8,7 @@ type Data =
 	| {
 			token: string;
 			user: {
+				id: string;
 				name: string;
 				email: string;
 				role: string;
@@ -46,6 +47,7 @@ async function validateToken(req: NextApiRequest, res: NextApiResponse<Data>) {
 	return res.status(200).json({
 		token: newToken,
 		user: {
+			id: userId,
 			name: user.name,
 			email: user.email,
 			role: user.role

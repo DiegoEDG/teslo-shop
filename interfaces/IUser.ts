@@ -11,6 +11,7 @@ export interface IUser {
 export interface UserLoggedIn {
 	token: string;
 	user: {
+		id: string;
 		name: string;
 		email: string;
 		role: string;
